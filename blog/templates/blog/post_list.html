@@ -1,8 +1,10 @@
 {% extends 'blog/base.html' %}
 
 {% block main_area %}
-    <h1>Blog</h1>
-    <h1>Blog {% if category %}<span class="badge badge-secondary">{{ category }}</span>{% endif %}</h1>
+    <h1>Blog
+        {% if category %}<span class="badge badge-secondary">{{ category }}</span>{% endif %}
+        {% if tag %}<span class="badge badge-light"><i class="fas fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>{% endif %}
+    </h1>
 
 
     {% if post_list.exists %}
@@ -26,6 +28,17 @@
                     <h5 class="text-muted">{{ p.hook_text }}</h5>
                 {% endif %}
                 <p class="card-text">{{ p.content | truncatewords:45 }}</p>
+
+                {% if p.tags.exists %}
+                    <i class="fas fa-tags"></i>
+                    {% for tag in p.tags.iterator %}
+                        <a href="{{ tag.get_absolute_url }}" class="badge badge-light">{{ tag }}</a>
+                    {% endfor %}
+                    <br/>
+                    <br/>
+                {% endif %}
+
+
                 <a href="{{ p.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
             </div>
 
